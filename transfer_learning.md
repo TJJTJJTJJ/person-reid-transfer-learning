@@ -83,7 +83,8 @@ S: Market, T: Duke; S: Duke, T: Market
 监督损失使得共享空间捕获到行人语义信息。
 
 S: Market, T: Duke; S: Duke, T: Market
-| method                                 |rank-1| mAP  |rank-1| mAP |
+
+| method                                 |rank-1| mAP  |rank-1| mAP  |
 |:-:                                     |:-:   |:-:   |:-:   |:-:   |
 | w/o $ L_{class} $, $ L_{ctrs} $        | 52.2 | 23.7 | 36.7 | 19.6 |
 | w $ L_{class} $, $ L_{ctrs} $          | 70.3 | 39.4 | 60.2 | 33.4 |
@@ -99,11 +100,12 @@ S: Market, T: Duke; S: Duke, T: Market
 当然，这里也隐含了一些假设，共享空间和特有空间一定是线性无关的。空间的基向量是2048维。
 
 S: Market, T: Duke; S: Duke, T: Market
-| method | rank-1 | mAP | rank-1 | mAP |
-|:-:|:-:|:-:|:-:|:-:|
-| w/o  $ E_T $, $ E_S $ | 60.5 | 28.7 | 48.4 | 26.8 |
+
+| method                        |rank-1| mAP  |rank-1| mAP  |
+|:-:                            |:-:   |:-:   |:-:   |:-:   |
+| w/o  $ E_T $, $ E_S $         | 60.5 | 28.7 | 48.4 | 26.8 |
 | w $ L_{class} $, $ L_{ctrs} $ | 70.3 | 39.4 | 60.2 | 33.4 |
-| $L_{rec}$                    | 44.5 | 20.3 | 31.2 | 18.4 |
+| $L_{rec}$                     | 44.5 | 20.3 | 31.2 | 18.4 |
 | $ L_{rec} $, $ E_T $和$ E_S $ | 52.2 | 23.7 | 36.7 | 19.6 |
 
 ____
