@@ -49,7 +49,8 @@ $$ L_{rec} = \sum_{i=1}^{N_s} ||X_i^s-\hat{X_i^s}||^2 + \sum_{i=1}^{N_t} ||X_i^t
 $$ L_{diff} = || {H_c^s}^T H_p^s ||_F^2 + || {H_c^t}^T H_p^t ||_F^2 \tag 4 $$
 
 总损失
-$$ L_{total} = L_{class} + \alpha*L_{ctrs} + \beta*L_{rec} + \gamma*L_{diff}  \tag {5}$$
+$$ L_{total} = L_{class} + \alpha*L_{ctrs} + \beta*L_{rec} + \gamma*L_{diff}  \tag {5} $$
+
 其中
 $$ \alpha=0.01, \beta= 2.0, \gamma=1500 $$
 
@@ -70,8 +71,8 @@ $$ \alpha=0.01, \beta= 2.0, \gamma=1500 $$
 作者在这里提示，当只有重构损失函数的时候，应该保持$E_I$不更新，只更新$E_C$.
 
 S: Market, T: Duke; S: Duke, T: Market
-| method | rank-1 | mAP | rank-1 | mAP |
-|:-:|:-:|:-:|:-:|:-:|
+| method    |rank-1| mAP  |rank-1| mAP  |
+|:---------:|:----:|:----:|:----:|:----:|
 | $L_{rec}$ | 44.5 | 20.3 | 31.2 | 18.4 |
 
 #### 监督$ L_{rec} $, $ L_{class} $和$ L_{ctrs} $
