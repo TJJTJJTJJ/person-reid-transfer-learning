@@ -179,7 +179,7 @@ $$L_D=L_T((x_s^i)^{n_s}\bigcup(x_t^i)^{n_t})$$
 
 是将相机不变性和域不变性合为一体，源域的positive不变，negative为源域的其他图片和目标域的图片，目标域的positive不变，negative为源域的图片和目标域的其他行人图片
 
-$$L_{CD}=L_T((x_s^i)^{n_s}\bigcup(x_t^i)^{n_t}\bigcup(x_{t*}^i)^{n_t^*}$$
+$$L_{CD}=L_T((x_s^i)^{n_s}\bigcup(x_t^i)^{n_t}\bigcup(x_{t*}^i)^{n_t^*})$$
 
 总损失：
 $$L_{HHL}=L_{cross}+\beta*L_{CD}$$
