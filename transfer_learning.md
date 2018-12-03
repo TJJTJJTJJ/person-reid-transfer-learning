@@ -166,18 +166,20 @@ $$L_T=\sum_{x_a, x_p, x_n}[D_{x_a, x_p}+m-D_{x_a, x_n}]_+$$
 相机不变性的triplet损失
 
 目标域中一张原始图片作为anchor，StarGAN图片为positive，其他图片为negative
-$$L_C=L_T(({x_t^i})_{i=1}^{n_t}\bigcup(x_{t*}^i)_{i=1}^{n_t^*})$$
+
+$$L_C=L_T((x_t^i)^{n_t}\bigcup(x_{t*}^i)^{n_t^*})$$
 
 域不变性的triplet损失
 
 源域中一张图片为anchor，同一id的其他图片作为positive，目标域的任一图片为negative
-$$L_D=L_T((x_s^i)_{i=1}^{n_s}\bigcup(x_t^i)_{i=1}^{n_t})$$
+
+$$L_D=L_T((x_s^i)^{n_s}\bigcup(x_t^i)^{n_t})$$
 
 相机不变性和域不变性的triplet损失
 
 是将相机不变性和域不变性合为一体，源域的positive不变，negative为源域的其他图片和目标域的图片，目标域的positive不变，negative为源域的图片和目标域的其他行人图片
 
-$$L_{CD}=L_T((x_s^i)_{i=1}^{n_s}\bigcup(x_t^i)_{i=1}^{n_t}\bigcup{x_{t*}^i\}_{i=1}^{n_t^*)}$$
+$$L_{CD}=L_T((x_s^i)^{n_s}\bigcup(x_t^i)^{n_t}\bigcup(x_{t*}^i)^{n_t^*}$$
 
 总损失：
 $$L_{HHL}=L_{cross}+\beta*L_{CD}$$
