@@ -158,27 +158,26 @@ preson-reid中主要面临的问题：
 ### 损失函数
 
 分类损失
-$$L_{cross}=-\sum_{i=1}^{N_s}y_i^s.log\hat{y}_i^s \tag {1}$$
+$$L_{cross}=-\sum_{i=1}^{N_s}y_i^s.log\hat{y}_i^s$$
 
 triplet损失
 $$L_T=\sum_{x_a, x_p, x_n}[D_{x_a, x_p}+m-D_{x_a, x_n}]_+$$
 
 相机不变性的triplet损失
 
-* 目标域中一张原始图片作为anchor，StarGAN图片为positive，其他图片为negative
+目标域中一张原始图片作为anchor，StarGAN图片为positive，其他图片为negative
 
 $$L_C=L_T(\{{x_t^i}\}_{i=1}^{n_t}\bigcup\{{x_{t*}^i}\}_{i=1}^{n_t^*})$$
 
 域不变性的triplet损失
 
-* 源域中一张图片为anchor，同一id的其他图片作为positive，目标域的任一图片为negative
+源域中一张图片为anchor，同一id的其他图片作为positive，目标域的任一图片为negative
 
 $$L_D=L_T(\{{x_s^i}\}_{i=1}^{n_s}\bigcup\{{x_t^i}\}_{i=1}^{n_t})$$
 
-
 相机不变性和域不变性的triplet损失
 
-* 是将相机不变性和域不变性合为一体，源域的positive不变，negative为源域的其他图片和目标域的图片，目标域的positive不变，negative为源域的图片和目标域的其他行人图片
+是将相机不变性和域不变性合为一体，源域的positive不变，negative为源域的其他图片和目标域的图片，目标域的positive不变，negative为源域的图片和目标域的其他行人图片
 
 $$L_{CD}=L_T(\{{x_s^i}\}_{i=1}^{n_s}\bigcup\{{x_t^i}\}_{i=1}^{n_t}\bigcup\{{x_{t*}^i}\}_{i=1}^{n_t^*)}$$
 
@@ -272,8 +271,12 @@ $L_T$的提升效果很小是否可以说明目标数据集与源数据集的行
 
 参考链接：
 [Triplet Loss and Online Triplet Mining in TensorFlow](https://omoindrot.github.io/triplet-loss)
+
 [Re-ID with Triplet Loss](http://www.itkeyword.com/doc/2025902251705572502/re-id-with-triplet-loss)
-[In Defense of the Triplet Loss for Person Re-Identification](https://arxiv.org/pdf/1703.07737.pdf)[code](https://github.com/VisualComputingInstitute/triplet-reid)
+
+[In Defense of the Triplet Loss for Person Re-Identification](https://arxiv.org/pdf/1703.07737.pdf)
+
+[code](https://github.com/VisualComputingInstitute/triplet-reid)
 
 [Triplet Loss and Online Triplet Mining in TensorFlow](https://omoindrot.github.io/triplet-loss)这个博客讲述了triplet\_loss的起源、发展和具体使用的几种形式。最后的结论是应该使用在线的batch hard策略。
 
