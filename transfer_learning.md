@@ -353,8 +353,8 @@ LMP网络
 
 $$L_{T_{adv}}(G,D_T,p_x,p_y)=E_{y\sim p_y}[(D_T(y)-1)^2]+E_{x\sim p_x}[(D_T(G(x))-1)^2]$$
 $$L_{S_{adv}}(F,D_S,p_x,p_y)=E_{x\sim p_x}[(D_S(x)-1)^2]+E_{y\sim p_y}[(D_S(F(y)))^2]$$
-$$L_{cyc}(G,F)=E_{x\sim p_x}||F(G(x))-x||_1+E_{y\sim p_y}||G(F(y))-y||_1$$
-$$L_{ide}(G,F,p_x,p_y)=E_{x\sim p_x}||F(x)-x||_1+E_{y\sim p_y}||G(y)-y||_1$$
+$$L_{cyc}(G,F)=E_{x\sim p_x}\parallel F(G(x))-x \parallel_1+E_{y\sim p_y}\parallel G(F(y))-y\parallel_1$$
+$$L_{ide}(G,F,p_x,p_y)=E_{x\sim p_x}\parallel F(x)-x\parallel_1+E_{y\sim p_y}\parallel G(y)-y\parallel_1$$
 
 #### 3.3.2 SPGAN
 
@@ -382,7 +382,15 @@ $\lambda_1=10，\lambda_2=5，\lambda_3=2, m=2$，学习率为0.0002，batch=1�
 
 4个conv+4个max pool+1个FC。
 
-x(3,256,256)->conv(3,64,k=(4,4),s=2)->max pool(k=(2,2),s=2)->conv(64,128,k=(4,4),s=2)->max pool(k=(2,2),s=2)->conv(128,256,k=(4,4),s=2)->max pool(k=(2,2),s=2)->conv(256,512,k=(4,4),s=2)->max pool(k=(2,2),s=2)(1,1,512)->FC(512, 128)->leak\_relu(0.2)->dropout(0.5)->FC(128,64)
+x(3,256,256)->conv(3,64,k=(4,4),s=2)->max pool(k=(2,2),s=2)
+
+->conv(64,128,k=(4,4),s=2)->max pool(k=(2,2),s=2)
+
+->conv(128,256,k=(4,4),s=2)->max pool(k=(2,2),s=2)
+
+->conv(256,512,k=(4,4),s=2)->max pool(k=(2,2),s=2)(1,1,512)
+
+->FC(512, 128)->leak\_relu(0.2)->dropout(0.5)->FC(128,64)
 
 输入预处理：随机左右翻转、resize(286)、crop(256)、img/127.5-1。
 
@@ -436,16 +444,20 @@ batch\_size=16, total\_epoch=50, SGD, momentum=0.9, gamma=0.1, lr_ini=0.001, dec
 
 假设目标都是为了使源域与目标域的行人特征映射到同一特征空间。这里的CycleGAN做到了这一点。LMP可以认为是加在哪里都有效的一种方式。那SiaNet其实更像是在保证生成的图片不仅要保留源图片的内容，更要保留源图片的行人特征。这种保留是以一种隐空间的形式在保存，而不是明显的分类损失这样子。
 
-**$\lambda_3 $对比实验**
+$\lambda_3 $对比实验
+
 ![$\lambda_3 $对比实验](./pic/SPGAN/SPGAN5.png)
 
-**pool 和 part的对比实验**
+pool 和 part的对比实验
+
 ![pool 和 part的对比实验](./pic/SPGAN/SPGAN6.png)
+
 也就是说，pool的方式和parts的取法是实验得到的，不是凭空想出来的。
 
 通过上述实验超参数的设置对比实验，与HHL论文比较，都是固定其他，变化一个参数，然后选取最优的参数，是基于局部最优就是全局最优的思想。感觉到作者的实验做得很足。
 
-**不同base model的对比实验**
+不同base model的对比实验
+
 ![不同base model的对比实验](./pic/SPGAN/SPGAN7.png)
 
 ### 附录
@@ -528,6 +540,7 @@ $$L_{ID}=E_{a \sim p_{data}(a)} [||(G(a)-a) \odot M(a)||_2] + E_{b \sim p_{data}
 其中，$M(b)$表示使用PSPNet分割后的结果。
 
 转化效果如下图所示
+
 ![PTGAN的转化效果](./pic/PTGAN/PTGAN.png)
 
 这里的Cycle-Gan生成图片的效果和SPGAN生成的效果还是有一些区别的，不是很理解。
@@ -543,9 +556,11 @@ Zhedong Zheng Liang Zheng Yi Yang
 这篇论文主要是利用DCGAN生成新的数据集进行数据集扩充。
 
 网络架构如图所示：
+
 ![DCGAN+CNN的网络结构](./pic/DCGAN+CNN/DCGAN+CNN.png)
 
 生成效果图
+
 ![生成效果图](./pic/DCGAN+CNN/DCGAN+CNN2.png)
 
 生成图片的标签LSRO
