@@ -564,8 +564,8 @@ Zhedong Zheng Liang Zheng Yi Yang
 ![生成效果图](./pic/DCGAN+CNN/DCGAN+CNN2.png)
 
 生成图片的标签LSRO
-$$q_{LSR}=\begin{cases} \frac{\epsilon}{K},k\neq y\\
-                        1-\epsilon+\frac{\epsilon}{K},k=y \end{cases}$$
+$$q_{LSR}=\begin{cases} \frac{\epsilon}{K},&k\neq y\\\\
+                        1-\epsilon+\frac{\epsilon}{K},&k=y \end{cases}$$
 $$l_{LSR}=-(1-\epsilon)log(p(y))-\frac{\epsilon}{K}\sum_{k=1}^{K}log(p(k))$$
 $$q_{LSRO}=\frac{1}{K}$$
 $$l_{LSRO}=-(1-Z)log(p(y))-\frac{Z}{K}\sum_{k=1}^Klog(p(k))$$
