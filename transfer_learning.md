@@ -327,8 +327,10 @@ code:<https://github.com/zhunzhong07/CamStyle>
 
 GAN网络
 ![SPGAN](./pic/SPGAN/SPGAN1.png)
+
 LMP网络
 ![LMP](./pic/SPGAN/SPGAN3.png)
+
 行人重识别整体网络
 ![SPGAN](./pic/SPGAN/SPGAN2.png)
 
