@@ -697,7 +697,7 @@ $$L_{att}=-\frac{1}{n_{bs}}\sum_{i=1}^{n_{bs}}\sum_{j=1}^{m}(a_{i,j}log(p_{att}(
 
 Identity Inferred Attribute (IIA) space (c)
 $$L_{rec}=\parallel x_{id}-f_{IIA}(x_{id}) \parallel ^2 \tag{3}$$
-$$L_{ID-transfer}=\parallel e_{IIA}-\tilde{p}_{att} \parallel ^2 \tag{4}$$
+$$L_{ID-transfer}=\parallel e_{IIA}-\tilde{p}\_{att} \parallel ^2 \tag{4}$$
 $$L_{att,IIA}=-\frac{1}{n_{bs}}\sum_{i=1}^{n_{bs}}\sum_{j=1}^{m}(a_{i,j}log(p_{IIA}(I_i,j))+(1-a_{i,j})log(1-p_{IIA}(I_i,j))) \tag{5}$$
 $$L_{IIA}=L_{att,IIA}+\lambda_1 L_{rec}+\lambda_2 L_{ID-transfer} \tag{6}$$
 $$\lambda_1=10, \lambda_2=10$$
