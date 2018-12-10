@@ -570,3 +570,170 @@ $$l_{LSR}=-(1-\epsilon)log(p(y))-\frac{\epsilon}{K}\sum_{k=1}^{K}log(p(k))$$
 $$q_{LSRO}=\frac{1}{K}$$
 $$l_{LSRO}=-(1-Z)log(p(y))-\frac{Z}{K}\sum_{k=1}^Klog(p(k))$$
 其中，真实图片的Z=0，生成图片的Z=1.
+
+## 5. MMFA
+
+[Multi-task Mid-level Feature Alignment Network for Unsupervised Cross-Dataset Person Re-Identification](https://arxiv.org/pdf/1807.01440.pdf)
+
+Shan Lin, Haoliang Li, Chang-Tsun Li, Alex Chichung Kot, BMVC 2018
+
+### 5.1 前言
+
+其想法也是将源域与目标域映射到同一特征空间。创新点是：
+
+* 利用MMD缩小源域与目标域的分布差异
+* 考虑了属性
+
+[MMD的参考代码](https://blog.csdn.net/a529975125/article/details/81176029)
+
+### 5.2 网络架构
+
+![MMFA的网络架构](./pic/MMFA/MMFA.png)
+{% asset_img MMFA.png MMFA的网络架构 %}
+
+网络架构的说明:
+
+* 每一个batch中包括$n_s$张源域图片，$n_t$张目标域图片。batch=32
+* backbone是resnet50，并且修改resnet50的avg\_pool为max\_pool
+* $H_S$是pool层的输出向量，$H_S^{id}$是ID-FC层的输出相邻，$H_S^{attr_m}$Attr-FC-m的输出向量。
+* input (256,128,3)
+* FC=fc+bn+dropout(0.5)+leaky ReLU+fc
+* SGD:momentum=0.9,weight decay=5x10e-4
+* lr=0.01,每20个epoch乘以0.1
+* 测试使用max pool的2048维向量的欧式距离
+* [Market](http://www.liangzheng.org/Project/project_reid.html)有27个[属性](https://github.com/vana77/Market-1501_Attribute)，[Duke](http://vision.cs.duke.edu/DukeMTMC/)有23个[属性](https://github.com/vana77/DukeMTMC-attribute)
+
+### 5.3 损失函数
+
+Identity Loss:
+$$L_{id}=-\frac{1}{n_s}\sum_{i=1}^{n_S}log(p_{id}(h_{S,i}^{id},y_{S,i}))$$
+
+Attribute Loss:
+$$L_{attr}=-\frac{1}{M}\frac{1}{n_S}\sum_{m=1}^{M}\sum_{i=1}^{n_S}(a_{S,i}^{m}\cdot log(p_{attr}(h_{S,i}^{attr_m}, m)) - (1-a_{S,i}^{m})\cdot log(1-p_{attr}(h_{S,i}^{attr_m}, m)))$$
+
+Attribute Feature Adaptation
+$$L_{AAL}=\frac{1}{M}\sum_{m=1}^{M}MMD(H_{S}^{attr_m}, H_{T}^{attr_m})^2\\
+         =\frac{1}{M}\sum_{m=1}^{M}\parallel \frac{1}{n_S}\sum_{i=1}^{n_S}\phi(h_{S,i}^{attr_m}) - \frac{1}{n_T}\sum_{i=1}^{n_T}\phi(h_{T,j}^{attr_m}) \parallel _{H}^2 \\
+         =\frac{1}{M}\sum_{m=1}^{M}[ \frac{1}{(n_S)^2}\sum_{i=1}^{n_S}\sum_{i'=1}^{n_S}k(h_{S,i}^{attr_m}, h_{S,i'}^{attr_m})+\frac{1}{(n_T)^2}\sum_{i=1}^{n_T}\sum_{i'=1}^{n_T}k(h_{T,i}^{attr_m}, h_{T,i'}^{attr_m})-\frac{2}{n_S\cdot n_T}\sum_{i=1}^{n_S}\sum_{j=1}^{n_T}k(h_{S,i}^{attr_m}, h_{T,j}^{attr_m})  ] $$
+
+$$k(h_{S,i}^{attr_m}, h_{T,j}^{attr_m})=exp(-\frac{1}{2\alpha}\parallel  h_{S,i}^{attr_m} - h_{T,j}^{attr_m}\parallel ^2)$$
+$$\alpha=1,5,10$$
+
+Mid-level Deep Feature Adaptation
+$$L_{MDAL}=MMD(H_S,H_T)^2$$
+
+Overall loss
+$$L_{all}=L_{id}+\lambda_1 L_{attr}+\lambda_2 L_{AAL}+\lambda_3 L_{MDAL}$$
+$$\lambda_1=0.1,\lambda_2=1,\lambda_3=1$$
+
+### 5.4 实验分析
+
+#### 5.4.1 实验结果
+
+![实验结果](./pic/MMFA/MMFA2.png)
+{% asset_img MMFA2.png 实验结果%}
+
+### 5.4.2 实验模块
+
+实验模块对比实验结果
+![实验模块对比实验结果](./pic/MMFA/MMFA3.png)
+{% asset_img MMFA3.png 实验模块对比实验结果%}
+
+### 5.5 附录
+
+通过实验结果可以看出，在MMFA模型中，ID+Mid-level Deep Feature Adaptation的贡献最大。
+
+下一步可以尝试考虑Mid-level Deep Feature Adaptation。
+
+作者把avg pool 换成max pool。
+
+## 6. TJ-AIDL
+
+[Transferable Joint Attribute-Identity Deep Learning for Unsupervised Person Re-Identification](http://www.eecs.qmul.ac.uk/~xiatian/papers/WangEtAl_CVPR2018.pdf)
+
+Jingya Wang, Xiatian Zhu, Shaogang Gong, Wei Li, ECCV 2018
+
+### 6.1 前言
+
+这篇论文的创新点在于：
+
+* 根据属性和id的关系，提出了Identity Inferred Attribute Space。
+
+### 6.2 网络架构
+
+Attribute-Identity Transferable Joint Learning
+
+![TJ-AIDL的网络架构 ](./pic/TJ-AIDL/TJ-AIDL.png)
+{% asset_img TJ-AIDL.png TJ-AIDL的网络架构%}
+
+Unsupervised Target Domain Adaptation
+
+![IJ-AIDL的部分网络架构详解](./pic/TJ-AIDL/TJ-AIDL2.png)
+{% asset_img TJ-AIDL2.png IJ-AIDL的部分网络架构详解 %}
+
+网络架构的简要说明：
+
+* (a) Identity Branch
+* (b) Attribute Branch
+* (c) Identity Inferred Attribute (IIA) space
+* 训练过程分为两步:
+* * (I) 源域训练: Attribute-Identity Transferable Joint Learning
+* * (II) 目标域微调: Unsupervised Target Domain Adaptation
+* 一般情况下Identity Branch和Attribute Branch是共享网络，但是本论文中特意分成两个非共享网络
+* 重点在于对$e_{IIA}$的处理
+* IIA-encoder 是3个fc层，512/128/m，decoder是encoder的镜像。
+* 基准网络是MobileNet
+* Adam优化器，lr=0.002，mementum$\beta_1=0.5, \beta_2=0.999$
+* batch size=8
+> We started with training the identity branch by 100,000 iterations on the source identity labels and then the whole model by 20,000 iterations for both transferable joint learning on the labelled source data and unsupervised domain adaptation on the unlabelled target data
+
+### 6.3 损失函数
+
+Identity Branch (a) softmax
+$$L_{id}=-\frac{1}{n_{bs}}\sum_{i=1}^{n_{bs}}log(p_{id}(I_i^S,y_i^S)) \tag{1}$$
+
+Attribute Branch(b) sigmoid
+$$L_{att}=-\frac{1}{n_{bs}}\sum_{i=1}^{n_{bs}}\sum_{j=1}^{m}(a_{i,j}log(p_{att}(I_i,j))+(1-a_{i,j})log(1-p_{att}(I_i,j))) \tag{2}$$
+
+Identity Inferred Attribute (IIA) space (c)
+$$L_{rec}=\parallel x_{id}-f_{IIA}(x_{id}) \parallel ^2 \tag{3}$$
+$$L_{ID-transfer}=\parallel e_{IIA}-\tilde{p}_{att} \parallel ^2 \tag{4}$$
+$$L_{att,IIA}=-\frac{1}{n_{bs}}\sum_{i=1}^{n_{bs}}\sum_{j=1}^{m}(a_{i,j}log(p_{IIA}(I_i,j))+(1-a_{i,j})log(1-p_{IIA}(I_i,j))) \tag{5}$$
+$$L_{IIA}=L_{att,IIA}+\lambda_1 L_{rec}+\lambda_2 L_{ID-transfer} \tag{6}$$
+$$\lambda_1=10, \lambda_2=10$$
+
+Impact of IIA on Identity and Attribute Branches
+$$L_{att-total}=L_{att}+\lambda_2 L_{ID-transfer} \tag{7}$$
+
+### 6.4 训练与部署流程
+
+![IJ-AIDL的训练与部署流程](./pic/TJ-AIDL/TJ-AIDL3.png)
+{% asset_img IJ-AIDL3.png IJ-AIDL的训练与部署流程 %}
+
+### 6.5 模块分析
+
+#### 6.5.1 ID和Attribute模块分析
+
+![IJ-AIDL的ID和Attribute模块分析](./pic/TJ-AIDL/TJ-AIDL4.png)
+{% asset_img IJ-AIDL4.png IJ-AIDL的模块分析 %}
+
+通过ID only的mAP和HHL的baseline，可以看出MobileNet和Resnet50对mAP的影响不受很大。
+
+另外，可以看出，依然是ID占据了很大比重。
+
+#### 6.5.2 Adapation的作用
+
+![IJ-AIDL的Adapation的作用](./pic/TJ-AIDL/TJ-AIDL5.png)
+{% asset_img TJ-AIDL5.png IJ-AIDL的Adapation的作用 %}
+
+从表格中可以看出，Adaptation的作用很小。说明，预训练的模型已经很好地能保持属性的一致性，即不同角度得到的属性是一样的。
+
+### 6.6 补充
+
+还是难以理解作者这么做的出发点，感觉有点凭空就设计出这么多损失函数，可能是哪里还缺点什么东西。
+
+训练更新的时候方程(7)的出现原因是什么？更新(6)的时候应该就已经对attr进行了影响吧？
+
+在step(II)中，是怎么更新方程(6)的。
+
+Identity Inferred Attribute Space的合理性是怎么体现的？
